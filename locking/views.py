@@ -105,7 +105,7 @@ def render_lock_status(request, lock=None, status=200):
             'locked_by_name': locked_by_name,
             'applies': lock.lock_applies_to(request.user),
         })
-    return HttpResponse(json_encode(data), mimetype='application/json', status=status)
+    return HttpResponse(json_encode(data), content_type='application/json', status=status)
 
 
 def lock_status(model_admin, request, object_id, extra_context=None, **kwargs):
@@ -145,4 +145,4 @@ def locking_js(model_admin, request, object_id, extra_context=None):
                            ? DJANGO_LOCKING : {{}};
         DJANGO_LOCKING.config = {config_data}
     """).strip().format(config_data=json_encode(js_vars))
-    return HttpResponse(response_js, mimetype='application/x-javascript')
+    return HttpResponse(response_js, content_type='application/x-javascript')
