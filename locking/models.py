@@ -1,14 +1,11 @@
 import logging
 from datetime import datetime
 
+from django.conf import settings
 from django.db import models
-
 from django.utils import timezone
-try:
-    from account import models as auth
-except:
-    from django.contrib.auth import models as auth
 
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -92,7 +89,7 @@ class Lock(models.Model):
         null=True,
         editable=False)
 
-    _locked_by = models.ForeignKey(auth.User,
+    _locked_by = models.ForeignKey(settings.AUTH_USER_MODEL,
         db_column='locked_by',
         related_name="working_on_%(app_label)s_%(class)s",
         null=True,
@@ -197,7 +194,7 @@ class Lock(models.Model):
         """
         logger.debug("Attempting to initiate a lock for user `%s`" % user)
 
-        if not isinstance(user, auth.User):
+        if not isinstance(user, get_user_model()):
             raise ValueError("You should pass a valid auth.User to lock_for.")
 
         if self.lock_applies_to(user):
