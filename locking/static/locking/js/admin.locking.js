@@ -206,8 +206,8 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
             lock_removed: 'User "%(locked_by_name)s" removed your lock. If you save, ' +
                          'your attempts may be thwarted due to another lock ' +
                          ' or you may have stale data.',
-            is_locked:   'This page is locked by <em>%(locked_by_name)s</em> ' +
-                         'and editing is disabled.',
+            is_locked:   'This page was locked by <em>%(locked_by_name)s</em> ' +
+                         'at %(locked_at)s and editing is disabled.',
             has_expired: 'You have lost your lock on this page. If you save, ' +
                          'your attempts may be thwarted due to another lock ' +
                          ' or you may have stale data.',

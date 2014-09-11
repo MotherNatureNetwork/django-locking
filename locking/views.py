@@ -104,6 +104,7 @@ def render_lock_status(request, lock=None, status=200):
             'locked_by': getattr(lock.locked_by, 'username', None),
             'locked_by_name': locked_by_name,
             'applies': lock.lock_applies_to(request.user),
+            'locked_at': lock.locked_at.isoformat(),
         })
     return HttpResponse(json_encode(data), content_type='application/json', status=status)
 
@@ -129,7 +130,7 @@ def locking_js(model_admin, request, object_id, extra_context=None):
         locking_urls.update({
             "lock": reverse("admin:%s_%s_lock" % info, args=[object_id]),
             "lock_clear":  reverse("admin:%s_%s_lock_clear" % info, args=[object_id]),
-            "lock_status": reverse("admin:%s_%s_lock_status" % info, args=[object_id]),        
+            "lock_status": reverse("admin:%s_%s_lock_status" % info, args=[object_id]),
         })
 
     js_vars = {
