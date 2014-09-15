@@ -159,7 +159,9 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
         enableForm: function() {
             if (!this.isDisabled) {
                 return;
-            }
+            } else {
+                this.updateNotification(this.text.lock_acquired, data, "alert-success");
+            };
             this.isDisabled = false;
             $(":input:not(.django-select2, .django-ckeditor-textarea)").not('._locking_initially_disabled').removeAttr("disabled");
 
@@ -175,7 +177,6 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
                 return;
             }
             this.isDisabled = true;
-            this.lockingSupport = false;
             data = data || {};
             if (this.lockOwner && this.lockOwner == (this.currentUser || data.current_user)) {
                 var msg;
@@ -201,17 +202,18 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
             $(document).trigger('locking:disabled');
         },
         text: {
-            warn:        'Your lock on this page expires in less than %s ' +
-                         'minutes. Press save or <a href="">reload the page</a>.',
-            lock_removed: 'User "%(locked_by_name)s" removed your lock. If you save, ' +
-                         'your attempts may be thwarted due to another lock ' +
-                         ' or you may have stale data.',
-            is_locked:   'This page was locked by <em>%(locked_by_name)s</em> ' +
-                         'at %(locked_at)s and editing is disabled.',
-            has_expired: 'You have lost your lock on this page. If you save, ' +
-                         'your attempts may be thwarted due to another lock ' +
-                         ' or you may have stale data.',
-            prompt_save: 'Do you wish to save the page?',
+            warn:          'Your lock on this page expires in less than %s ' +
+                           'minutes. Press save or <a href="">reload the page</a>.',
+            lock_removed:  'User "%(locked_by_name)s" removed your lock. If you save, ' +
+                           'your attempts may be thwarted due to another lock ' +
+                           ' or you may have stale data.',
+            is_locked:     'This page was locked by <em>%(locked_by_name)s</em> ' +
+                           'at %(locked_at)s and editing is disabled.',
+            has_expired:   'You have lost your lock on this page. If you save, ' +
+                           'your attempts may be thwarted due to another lock ' +
+                           ' or you may have stale data.',
+            prompt_save:   'Do you wish to save the page?',
+            lock_acquired: 'You now have a lock on this page! With great power comes great responsibility...',
         },
         lockOwner: null,
         currentUser: null,
@@ -279,9 +281,11 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
             var regex = new RegExp("\/0\/" + action + "\/$");
             return baseUrl.replace(regex, "/" + id + "/" + action + "/");
         },
-        updateNotification: function(text, data) {
+        updateNotification: function(text, data, classes) {
             $('html, body').scrollTop(0);
+            classes = classes || "alert-error";
             text = interpolate(text, data, true);
+            this.$notificationElement.attr("class", 'alert').addClass(classes);
             this.$notificationElement.html(text).hide().fadeIn('slow');
         },
         // Locking toggle function
@@ -320,7 +324,7 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
 
     $(document).ready(function() {
         var $target = $("#content-inner, #content").eq(0);
-        var $notificationElement = $('<div id="locking_notification"></div>').prependTo($target);
+        var $notificationElement = $('<div id="locking_notification" class="hidden"></div>').prependTo($target);
         $notificationElement.djangoLocking();
     });
 
