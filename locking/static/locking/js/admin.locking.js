@@ -306,6 +306,11 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
                         async: false,
                         success: function() {
                             $link.hide();
+                        },
+                        error: function(jqxhr) {
+                            if (jqxhr.status === 403) {
+                                alert("You must be an editor to remove this lock.");
+                            };
                         }
                     });
                 }
