@@ -215,7 +215,7 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
                            'your attempts may be thwarted due to another lock ' +
                            ' or you may have stale data.',
             prompt_save:   'Do you wish to save the page?',
-            lock_acquired: 'You now have a lock on this page! With great power comes great responsibility...',
+            lock_acquired: 'You now have a lock on this page! <a href="">Reload the page</a>',
         },
         lockOwner: null,
         currentUser: null,
