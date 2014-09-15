@@ -189,6 +189,8 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
                 }
                 alert(msg);
             } else {
+                var local_time = new Date(data.locked_at);
+                data.locked_at = local_time.toLocaleString();
                 this.updateNotification(this.text.is_locked, data);
             }
             $(":input[disabled]").addClass('_locking_initially_disabled');
