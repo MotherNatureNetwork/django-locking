@@ -60,6 +60,7 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
         this.$notificationElement = $(notificationElement);
         this.config = DJANGO_LOCKING.config || {};
         this.urls = this.config.urls || {};
+        this.unlockingInProgress = false;
 
         for (var key in this.text) {
             if (typeof gettext == 'function') {
@@ -74,6 +75,8 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
 
         // Disable lock when you leave
         $(window).on('beforeunload', function() {
+            // Prevent refreshLock from completing since we're attempting to unlock...
+            this.unlockingInProgress = true;
 
             // We have to assure that our lock_clear request actually
             // gets through before the user leaves the page, so it
@@ -222,7 +225,7 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
         refreshTimeout: null,
         lockingSupport: true,  // false for changelist views and new objects
         refreshLock: function() {
-            if (!this.urls.lock) {
+            if (!this.urls.lock || this.unlockingInProgress) {
                 return;
             }
             var self = this;
