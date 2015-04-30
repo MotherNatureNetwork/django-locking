@@ -77,6 +77,10 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
         $(window).on('beforeunload', function() {
             // Prevent refreshLock from completing since we're attempting to unlock...
             this.unlockingInProgress = true;
+            if (self.refreshTimeout) {
+                clearTimeout(self.refreshTimeout);
+                self.refreshTimeout = null;
+            }
 
             // We have to assure that our lock_clear request actually
             // gets through before the user leaves the page, so it
