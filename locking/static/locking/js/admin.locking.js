@@ -278,7 +278,7 @@ var DJANGO_LOCKING = DJANGO_LOCKING || {};
                     if (!self.lockingSupport) {
                         return;
                     }
-                    self.refreshTimeout = setTimeout(function() { self.refreshLock(); }, 5000);
+                    self.refreshTimeout = setTimeout(function() { self.refreshLock(); }, 15000);
                 }
             });
         },
