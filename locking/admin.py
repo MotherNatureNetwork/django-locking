@@ -119,7 +119,8 @@ class LockableAdminMixin(object):
                 locking_media = unicode(locking_media)
             context['media'] += locking_media
         return super(LockableAdminMixin, self).render_change_form(
-                request, context, add=add, obj=obj, **kwargs)
+                request, context, add=add, change=change, form_url=form_url, obj=obj
+        )
 
     def get_form(self, request, obj=None, **kwargs):
         kwargs['form'] = locking_form_factory(self.model, kwargs.get('form', self.form))
