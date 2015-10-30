@@ -141,17 +141,15 @@ class LockableAdminMixin(object):
                     lock.unlock_for(request.user)
         super(LockableAdminMixin, self).save_model(request, obj, *args, **kwargs)
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         """
         Extended queryset method which adds a custom SQL select column,
         `_locking_user_pk`, which is set to the pk of the current request's
         user instance. Doing this allows us to access the user id by
         obj._locking_user_pk for any object returned from this queryset.
         """
-        qs = super(LockableAdminMixin, self).queryset(request)
-        return qs.extra(select={
-            '_locking_user_pk': "%d" % request.user.pk,
-        })
+        self._locking_user_pk = request.user.pk
+        return super(LockableAdminMixin, self).queryset(request)
 
     def get_lock_for_admin(self, obj):
         """
@@ -159,7 +157,7 @@ class LockableAdminMixin(object):
         interface use in admin list display like so:
         list_display = ['title', 'get_lock_for_admin']
         """
-        current_user_id = obj._locking_user_pk
+        current_user_id = self._locking_user_pk
 
         try:
             lock = Lock.objects.get_lock_for_object(obj)
