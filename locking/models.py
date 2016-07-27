@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
 from . import managers, settings as locking_settings
 from .utils import timedelta_to_seconds
@@ -43,7 +43,7 @@ class LockingManager(models.Manager):
             # and if so use that. This allows the use of prefetch_related()
             # for locks in changelist views.
             generic_rels = [f for f in obj._meta.many_to_many
-                            if isinstance(f, generic.GenericRelation)]
+                            if isinstance(f, GenericRelation)]
             try:
                 locks_field = [f.name for f in generic_rels if f.rel.to == self.model][0]
             except IndexError:
@@ -83,7 +83,7 @@ class Lock(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
 
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     _locked_at = models.DateTimeField(db_column='locked_at',
         null=True,
