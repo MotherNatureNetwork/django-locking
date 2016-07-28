@@ -149,7 +149,7 @@ class LockableAdminMixin(object):
         obj._locking_user_pk for any object returned from this queryset.
         """
         self._locking_user_pk = request.user.pk
-        return super(LockableAdminMixin, self).queryset(request)
+        return super(LockableAdminMixin, self).get_queryset(request)
 
     def get_lock_for_admin(self, obj):
         """
