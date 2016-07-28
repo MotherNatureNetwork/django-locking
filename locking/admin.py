@@ -45,7 +45,7 @@ class LockableAdminMixin(object):
 
     def locking_media(self, obj=None):
         opts = self.model._meta
-        info = (opts.app_label, opts.module_name)
+        info = (opts.app_label, opts.model_name)
         pk = getattr(obj, 'pk', None) or 0
         return forms.Media(js=(
             reverse('admin:%s_%s_lock_js' % info, args=[pk]),))
@@ -76,7 +76,7 @@ class LockableAdminMixin(object):
             return functools.update_wrapper(wrapper, view)
 
         opts = self.model._meta
-        info = (opts.app_label, opts.module_name)
+        info = (opts.app_label, opts.model_name)
 
         urlpatterns = patterns('',
             url(r'^(.+)/locking_variables\.js$',
