@@ -32,9 +32,9 @@ class LockingManager(models.Manager):
                     'actual_type': type(obj).__name__,})
         if not getattr(obj._meta, 'pk', None):
             raise Exception((
-                u"Cannot get lock for instance %(instance)s; model "
-                u"%(app_label)s.%(object_name)s has no primary key field") % {
-                    'instance': unicode(obj),
+                "Cannot get lock for instance %(instance)s; model "
+                "%(app_label)s.%(object_name)s has no primary key field") % {
+                    'instance': str(obj),
                     'app_label': obj._meta.app_label,
                     'object_name': obj._meta.object_name,})
 
